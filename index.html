@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breakout</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+<div class="game-header">
+  <div class="stat">
+    <span class="stat-label">Score</span>
+    <span class="stat-value" id="score">0</span>
+  </div>
+  <div class="stat" style="align-items:center">
+    <span class="stat-label">Level</span>
+    <span class="stat-value" id="level">1</span>
+  </div>
+  <div class="stat" style="align-items:flex-end">
+    <span class="stat-label">Lives</span>
+    <div class="lives" id="lives"></div>
+  </div>
+</div>
+
+<div class="hud-bar">
+  <span class="combo-label" id="comboLabel">Hits: 0 / 10</span>
+  <div class="combo-meter"><div class="combo-fill" id="comboFill"></div></div>
+  <span class="ball-count" id="ballCount">Balls: 1</span>
+</div>
+
+<div class="game-wrap" id="gameWrap">
+  <canvas id="c"></canvas>
+  <div class="overlay" id="startOverlay">
+    <h1>Breakout</h1>
+    <p>Arrow keys or mouse to move the paddle. Break all bricks to advance.<br><br>Every <strong>10 blocks</strong> you break spawns a power-up: catch it for <strong>5 extra balls</strong>! The threshold drops by 2 each time you grab one.</p>
+    <button class="btn" id="startBtn">Start Game</button>
+  </div>
+  <div class="overlay hidden" id="gameOverOverlay">
+    <h1 id="endTitle">Game Over</h1>
+    <p id="endMsg">Final score: 0</p>
+    <button class="btn" id="restartBtn">Play Again</button>
+  </div>
+</div>
+
+<!-- 依賴順序載入：config → enemy → player → game → main -->
+<script src="./js/config.js"></script>
+<script src="./js/enemy.js"></script>
+<script src="./js/player.js"></script>
+<script src="./js/game.js"></script>
+<script src="./js/main.js"></script>
+
+</body>
+</html>
