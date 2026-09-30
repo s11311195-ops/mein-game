@@ -1,0 +1,18 @@
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VSCode
+.vscode/
+
+# Node
+node_modules/
+
+# 備份（不推送原始備份檔）
+_backup_original.html
