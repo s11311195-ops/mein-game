@@ -47,6 +47,11 @@ var mouseX = null;
 window.addEventListener('keydown', function(e) {
   keys[e.key] = true;
 
+  // 靜音快速鍵 (M)
+  if (e.key === 'm' || e.key === 'M') {
+    if (typeof toggleMute === 'function') toggleMute();
+  }
+
   if (state === 'playing') {
     easterBuffer.push(e.key.toLowerCase());
     if (easterBuffer.length > EASTER_CODE.length) easterBuffer.shift();
@@ -104,6 +109,7 @@ function showPopup(x, y, text, cls) {
 // ── 彩蛋：大球模式 ────────────────────────────────────────
 function activateBigBall() {
   setBigBallMode(!getBigBallMode());
+  if (typeof playSfxEaster === 'function') playSfxEaster();
 
   var flash = document.createElement('div');
   flash.className = 'easter-flash';
@@ -153,6 +159,7 @@ function update() {
     if (ball.x + ball.r > BASE_W) { ball.x = BASE_W - ball.r; ball.dx = -Math.abs(ball.dx); }
     if (ball.y - ball.r < 0)      { ball.y = ball.r;           ball.dy =  Math.abs(ball.dy); }
 
+    // 板子反彈
     if (
       ball.dy > 0 &&
       ball.y + ball.r >= paddle.y &&
@@ -167,6 +174,7 @@ function update() {
       ball.dy = Math.sin(angle) * spd;
       ball.y  = paddle.y - ball.r;
       spawnParticles(ball.x, ball.y, [0.72, 0.18, 45], 4);
+      if (typeof playSfxPaddle === 'function') playSfxPaddle();
     }
 
     if (ball.y - ball.r > BASE_H) ballsToRemove.push(bi);
@@ -178,6 +186,8 @@ function update() {
       if (ballBrickCollision(ball, b)) {
         hitBrick = true;
         b.hp--;
+        if (typeof playSfxBrick === 'function') playSfxBrick(b.hp);
+
         if (b.hp <= 0) {
           b.alive = false;
           hitCounter++;
@@ -221,6 +231,8 @@ function update() {
     renderLives();
     gameWrap.classList.add('shake');
     setTimeout(function() { gameWrap.classList.remove('shake'); }, 400);
+    if (typeof playSfxLoseLife === 'function') playSfxLoseLife();
+
     if (lives <= 0) { endGame(false); return; }
     resetBalls(level);
     updateHUD();
@@ -251,6 +263,7 @@ function update() {
       showPopup(paddle.x + paddle.w / 2, paddle.y - 20,
         '+' + POWERUP_EXTRA_BALLS + ' BALLS! Next: ' + comboThreshold + ' hits', 'powerup-text');
       spawnParticles(pu.x + pu.w / 2, pu.y + pu.h / 2, [0.78, 0.22, 145], 16);
+      if (typeof playSfxPowerup === 'function') playSfxPowerup();
       powerups.splice(pi, 1);
       continue;
     }
@@ -267,6 +280,7 @@ function update() {
   if (remaining === 0) {
     level++;
     if (level > MAX_LEVEL) { endGame(true); return; }
+    if (typeof playSfxLevelUp === 'function') playSfxLevelUp();
     levelEl.textContent = level;
     initBricks(level);
     resetBalls(level);
@@ -334,6 +348,10 @@ function startGame() {
   state = 'playing';
   startOverlay.classList.add('hidden');
   gameOverOverlay.classList.add('hidden');
+
+  // 開始播放背景音樂
+  if (typeof startBGM === 'function') startBGM();
+
   loop();
 }
 
@@ -343,6 +361,13 @@ function endGame(won) {
   endTitle.textContent = won ? 'You Win!' : 'Game Over';
   endMsg.textContent   = 'Final score: ' + score;
   gameOverOverlay.classList.remove('hidden');
+
+  if (won && typeof playSfxWin === 'function') {
+    playSfxWin();
+  }
+  if (typeof pauseBGM === 'function') {
+    pauseBGM();
+  }
 }
 
 function initUI() {

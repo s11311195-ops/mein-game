@@ -16,3 +16,7 @@ node_modules/
 
 # 備份（不推送原始備份檔）
 _backup_original.html
+
+# 根目錄原始音訊備份（音訊統一存放於 audio/bgm.mp3）
+Sara Skinner*.mp3
+audio/Sara Skinner*.mp3
